@@ -3,13 +3,15 @@
 import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./styles.css";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import AppNavbar from "./components/Navbar";
 import HeroSection from "./components/HeroSection";
 import Footer from "./components/Footer";
 import StatePage from "./components/StatePage";
 import IndiaMap from "./components/IndiaMap";
 import Calculator from "./components/WaterCalculator.js";
+import StateComparison from "./components/stateComp.js";
+import StateData from './data/StateData.json';
 
 const Home = ({ setSelectedState }) => {
     function handleStateClick(stateName) {
@@ -30,7 +32,7 @@ const Home = ({ setSelectedState }) => {
 
 const App = () => {
     const [selectedState, setSelectedState] = useState("Uttarakhand");
-
+    const defaultState = 'Uttarakhand';
     return (
         <Router>
             <AppNavbar />
@@ -41,10 +43,19 @@ const App = () => {
                 />
                 <Route path="/calculator" element={<Calculator />} />
                 <Route
-                    path={`/${selectedState}`}
+                    path="/"
+                    element={<Navigate to={`/${defaultState}`} />} // Redirect to default state
+                />
+                <Route
+                    path="/:selectedState"
                     element={<StatePage selectedState={selectedState} />}
                 />
+                <Route
+                    path="/stateComparison"
+                    element={<StateComparison stateData={StateData} />}
+                />
             </Routes>
+            <br></br>
             <Footer />
         </Router>
     );
